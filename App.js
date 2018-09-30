@@ -39,23 +39,14 @@ export default class App extends React.Component {
     this.state = {
       loading: true,
       events: [],
+      filteredEvents: [],
       filters: []
     };
-    this.testMethod = this.testMethod.bind(this);
     this.getEvents = this.getEvents.bind(this);
   }
 
   componentDidMount(){
-    this.testMethod();
     this.getEvents();
-  }
-
-  testMethod () {
-    setTimeout(()=>{
-      this.setState({
-        loading: false
-      })
-    }, 500)
   }
 
   getEvents(){
@@ -69,6 +60,9 @@ export default class App extends React.Component {
         return resBuffer.json();
       })
       .then((res)=>{
+        this.setState({
+          loading: false
+        });
         console.log(res);
       })
       .catch((error)=>{
