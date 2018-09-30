@@ -23,7 +23,7 @@ class EventItem extends Component {
         <Text style={styles.eventTitle}> {event.name} </Text>
         <Text style={styles.eventDate}>{event.date}</Text>
         <Text style={this.state.toggleOpen ? styles.expandedEvent : styles.hiddenEvent}>Style: {event.style}</Text>
-        <Image source={{uri: 'https://facebook.github.io/react/logo-og.png'}}
+        <Image source={{ uri: event.img}} 
           style={this.state.toggleOpen ? {width: 200, height: 200} : {width: 0, height: 0}} />
         <Button
           onPress={this.expandEvent}

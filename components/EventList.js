@@ -7,11 +7,10 @@ class EventList extends Component {
     return (
       <View style={styles.EventListView}>
         {this.props.events.map((event)=>{
-          return(
+          return (
             <EventItem key={event.name} event={event} />
           )
         })}
-        
       </View>
     )
   }
