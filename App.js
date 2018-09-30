@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 import Loading from './components/Loading';
 import EventList from './components/EventList';
+import handleErrors from './utilities/handleError';
 
 
 let testList = [
@@ -62,6 +63,17 @@ export default class App extends React.Component {
     this.setState({
       events: testList
     })
+    return fetch('https://www.eventbriteapi.com/v3/events/search/?token=VBUSKKCQ2VTXKPOP34PX')
+      .then(handleErrors)
+      .then((resBuffer)=>{
+        return resBuffer.json();
+      })
+      .then((res)=>{
+        console.log(res);
+      })
+      .catch((error)=>{
+        console.log(error);
+      })
   }
 
   render() {
@@ -90,6 +102,6 @@ const styles = StyleSheet.create({
   heading: {
     color: 'white',
     paddingTop:10,
-    fontSize: 20,
+    fontSize: 14,
   },
 });
