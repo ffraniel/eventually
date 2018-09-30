@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 import Loading from './components/Loading';
+import EventList from './components/EventList';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -37,6 +38,7 @@ export default class App extends React.Component {
         {!this.state.loading && (
           <ScrollView>
             <Text style={styles.heading}>Eventually</Text>
+            <EventList />
           </ScrollView>
         )}
       </View>
