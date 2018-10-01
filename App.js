@@ -40,9 +40,12 @@ export default class App extends React.Component {
       loading: true,
       events: [],
       filteredEvents: [],
-      filters: []
+      filters: [],
+      paginationKey: '',
+      hasMoreItems: null,
     };
     this.getEvents = this.getEvents.bind(this);
+    this.fetchMoreItems = this.fetchMoreItems.bind(this);
   }
 
   componentDidMount(){
@@ -60,14 +63,29 @@ export default class App extends React.Component {
         return resBuffer.json();
       })
       .then((res)=>{
+        let currentEvents = this.state.events;
+        currentEvents.push(res.events);
         this.setState({
-          loading: false
+          // events: currentEvents,
+          loading: false,
+          hasMoreItems: res.pagination.has_more_items,
+          paginationKey: res.pagination.continuation
         });
         console.log(res);
       })
       .catch((error)=>{
         console.log(error);
       })
+  }
+
+  fetchMoreItems (){
+    if(this.state.hasMoreItems) {
+      console.log("EVEN MORE EVENTS")
+      // then return fetch using the paginationKey held in state (continuation)
+    }
+    else {
+      console.log("No more left")
+    }
   }
 
   render() {
@@ -77,7 +95,7 @@ export default class App extends React.Component {
         {!this.state.loading && (
           <ScrollView>
             <Text style={styles.heading}>Eventually</Text>
-            <EventList events={this.state.events} />
+            <EventList events={this.state.events} hasMoreItems={this.state.hasMoreItems} fetchMoreItems={this.fetchMoreItems}/>
           </ScrollView>
         )}
       </View>

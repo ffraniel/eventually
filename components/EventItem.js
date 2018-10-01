@@ -18,6 +18,13 @@ class EventItem extends Component {
 
   render() {
     let event = this.props.event;
+    let name = event.name.text;
+    let description = event.description.html;
+    let link = event.url;
+    let start = event.start.utc; // review this when data is being passed through
+    let end = event.end.utc;
+    let thumbnail = event.logo.url;
+
     return (
       <View style={styles.event}>
         <Text style={styles.eventTitle}> {event.name} </Text>
