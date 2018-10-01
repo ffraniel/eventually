@@ -18,30 +18,31 @@ class EventItem extends Component {
 
   render() {
     let event = this.props.event;
-    let name = event.name.text;
-    let description = event.description.html;
-    let link = event.url;
-    let start = event.start.utc; // review this when data is being passed through
-    let end = event.end.utc;
-    let thumbnail = event.logo.url;
+
+    let eName = event.name.text;
+    let eDescription = event.description.html;
+    let eLink = event.url;
+    let eStart = event.start.utc; // review this when data is being passed through
+    let eEnd = event.end.utc;
+    let eThumbnail = event.logo ? event.logo.url : '';
+    {console.log(eThumbnail)}
 
     return (
-      <View style={styles.event}>
-        <Text style={styles.eventTitle}> {event.name} </Text>
-        <Text style={styles.eventDate}>{event.date}</Text>
-        <Text style={ this.state.toggleOpen ? styles.expandedEvent : styles.hiddenEvent } >
-          Style: {event.style}
-        </Text>
-        <Image source={{ uri: event.img }}
-          style={this.state.toggleOpen ? { width: 200, height: 200 } : { width: 0, height: 0 } }
-        />
-        <Text style={this.state.toggleOpen ? styles.expandedDetails : styles.hiddenDetails }>Webview element from eventbrite to go here.</Text>
+      <View style={styles.event}> 
+        <Text style={styles.eventTitle}> {eName} </Text>
+        <Text style={styles.eventDate}>{eStart}</Text>
+        <View style={ this.state.toggleOpen ? styles.expandedEvent : styles.hiddenEvent } >
+          {eThumbnail.length > 0 && <Image source={{ uri: eThumbnail }}
+            style={this.state.toggleOpen ? { width: 300, height: 300 } : { width: 0, height: 0 } }
+          />}   
+          <Text style={this.state.toggleOpen ? styles.expandedDetails : styles.hiddenDetails }> Webview element from eventbrite to go here.</Text>      
+        </View>
         <Button
           onPress={this.expandEvent}
           title={this.state.toggleOpen ? "Hide details ^" : "See event type"}
           color={this.state.toggleOpen? "rgb(153, 0, 51)": "#BADA55" }
           accessibilityLabel="See event style for this listing"
-        />
+        /> 
       </View>
     );
   }

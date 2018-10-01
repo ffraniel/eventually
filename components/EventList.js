@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Button } from 'react-native';
+import { StyleSheet, View, Button, Text } from 'react-native';
 import EventItem from './EventItem';
 
 class EventList extends Component {
   render() {
     return (
       <View style={styles.EventListView}>
-        {this.props.events.map((event)=>{
+        {this.props.events && this.props.events.map((event)=>{
           return (
             <EventItem key={event.id} event={event} />
           )
