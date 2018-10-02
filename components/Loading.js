@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, ActivityIndicator } from "react-native";
 
 class Loading extends Component {
   render() {
     return (
       <View style={styles.loadingView}>
-        <Text style={styles.loadingText}>LOADING</Text>
+        <ActivityIndicator size="large" color="white"/>
+        <Text style={styles.loadingText}>Loading</Text>
       </View>
     );
   }
