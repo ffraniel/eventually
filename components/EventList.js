@@ -6,9 +6,9 @@ class EventList extends Component {
   render() {
     return (
       <View style={styles.EventListView}>
-        {this.props.events && this.props.events.map((event)=>{
+        {this.props.events && this.props.events.map((event, num)=>{
           return (
-            <EventItem key={event.id} event={event} />
+            <EventItem key={event.id} event={event} num={num}/>
           )
         })}
         {this.props.hasMoreItems &&
@@ -19,6 +19,7 @@ class EventList extends Component {
             accessibilityLabel="Show more events"
           />
         }
+        {!this.props.hasMoreItems && <Text>No more items to show</Text>}
       </View>
     )
   }

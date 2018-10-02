@@ -25,18 +25,20 @@ class EventItem extends Component {
     let eStart = event.start.utc; // review this when data is being passed through
     let eEnd = event.end.utc;
     let eThumbnail = event.logo ? event.logo.url : '';
-    {console.log(eThumbnail)}
+    // {console.log(eThumbnail)}
 
     return (
       <View style={styles.event}> 
-        <Text style={styles.eventTitle}> {eName} </Text>
+        <Text style={styles.eventTitle}>{this.props.num}: {eName} </Text>
         <Text style={styles.eventDate}>{eStart}</Text>
-        <View style={ this.state.toggleOpen ? styles.expandedEvent : styles.hiddenEvent } >
+
+        <View style={ this.state.toggleOpen ? styles.expandedDetails : styles.hiddenDetails } >
           {eThumbnail.length > 0 && <Image source={{ uri: eThumbnail }}
-            style={this.state.toggleOpen ? { width: 300, height: 300 } : { width: 0, height: 0 } }
+            style={this.state.toggleOpen ? { width: 200, height: 200 } : { width: 0, height: 0 } }
           />}   
-          <Text style={this.state.toggleOpen ? styles.expandedDetails : styles.hiddenDetails }> Webview element from eventbrite to go here.</Text>      
+          <Text style={this.state.toggleOpen ? styles.expandedEvent : styles.hiddenEvent } innerHTML={eDescription}>Text</Text>      
         </View>
+
         <Button
           onPress={this.expandEvent}
           title={this.state.toggleOpen ? "Hide details ^" : "See event type"}
@@ -85,7 +87,7 @@ const styles = StyleSheet.create({
     height: 30
   },
   expandedDetails: {
-    height:30,
+    flex: 1,
   },
   hiddenDetails: {
     height: 0,

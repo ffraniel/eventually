@@ -3,8 +3,6 @@ import { StyleSheet, Text, View, ScrollView } from "react-native";
 import Loading from './components/Loading';
 import EventList from './components/EventList';
 import handleErrors from './utilities/handleError';
-import testList from './testList';
-
 
 export default class App extends React.Component {
   constructor(props) {
@@ -14,9 +12,10 @@ export default class App extends React.Component {
       events: [],
       filteredEvents: [],
       filters: [],
-      paginationKey: '',
       hasMoreItems: null,
+      currentPage: 1,
     };
+    this.resetEventsList = this.resetEventsList.bind(this);
     this.getEvents = this.getEvents.bind(this);
     this.fetchMoreItems = this.fetchMoreItems.bind(this);
   }
@@ -25,7 +24,16 @@ export default class App extends React.Component {
     this.getEvents();
   }
 
+  resetEventsList (){
+    if(this.state.events.length > 1) {
+      this.setState({
+        events: [],
+      })
+    }
+  }
+
   getEvents(){
+    this.resetEventsList();
     // console.log("get all events called with the filters: ", this.state.filters);
     return fetch('https://www.eventbriteapi.com/v3/events/search/?token=VBUSKKCQ2VTXKPOP34PX')
       .then(handleErrors)
@@ -33,15 +41,14 @@ export default class App extends React.Component {
         return resBuffer.json();
       })
       .then((res)=>{
-        // let currentEvents = this.state.events;
-        // currentEvents.push(res.events);
-        // console.log("current events = :", currentEvents)
-        let pagination = res.pagination.continuation || null;
+        // console.log("all results", res)
+        // console.log("the pagination: ", pagination)
+        // console.log("hasMoreresults: ", res.pagination.has_more_items)
         this.setState({
           events: res.events,
           loading: false,
           hasMoreItems: res.pagination.has_more_items,
-          paginationKey: pagination
+          currentPage: res.pagination.page_number,
         });
       })
       .catch((error)=>{
@@ -50,15 +57,36 @@ export default class App extends React.Component {
   }
 
   fetchMoreItems (){
+    // let nextPage = this.state.currentPage++;
     if(this.state.hasMoreItems) {
       this.setState({
+        currentPage: this.state.currentPage++,
         loading:true,
       })
+      console.log("the state", this.state)
+      return fetch(`https://www.eventbriteapi.com/v3/events/search/?token=VBUSKKCQ2VTXKPOP34PX&page=${this.state.currentPage}`)
+      .then(handleErrors)
+      .then((resBuffer)=>{
+        return resBuffer.json();
+      })
+      .then((res)=>{
+        let currentEvents = this.state.events;
+        console.log("the second lot of events: ", res.events)
+        this.setState({
+          events: currentEvents.concat(res.events),
+          loading: false,
+          hasMoreItems: res.pagination.has_more_items,
+          currentPage: res.pagination.page_number,
+        });
+        console.log("current events = :", currentEvents);
+      })
+      .catch((error)=>{
+        console.log(error);
+      })
       console.log("EVEN MORE EVENTS")
-      // then return fetch using the paginationKey held in state (continuation)
     }
     else {
-      console.log("No more left")
+      console.log("either no more items available")
     }
   }
 
@@ -66,12 +94,10 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         {this.state.loading && <Loading />}
-        {!this.state.loading && (
           <ScrollView>
             <Text style={styles.heading}>Eventually</Text>
             <EventList events={this.state.events} hasMoreItems={this.state.hasMoreItems} fetchMoreItems={this.fetchMoreItems}/>
           </ScrollView>
-        )}
       </View>
     );
   }
