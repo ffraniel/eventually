@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, Image, Button } from "react-native";
+import { StyleSheet, View, Text, Image, Button, Linking, TouchableOpacity } from "react-native";
 
 class EventItem extends Component {
   constructor(props) {
@@ -37,6 +37,9 @@ class EventItem extends Component {
             style={this.state.toggleOpen ? { width: 200, height: 200 } : { width: 0, height: 0 } }
           />}   
           <Text style={this.state.toggleOpen ? styles.expandedEvent : styles.hiddenEvent } innerHTML={eDescription}>Text</Text>      
+          <TouchableOpacity onPress={() => Linking.openURL(eLink)} accessibilityLabel="Navigate to the full event page in your web browser." >
+            <Text style={styles.linkEvent}>Full Listing</Text>
+          </TouchableOpacity>
         </View>
 
         <Button
@@ -92,6 +95,9 @@ const styles = StyleSheet.create({
   hiddenDetails: {
     height: 0,
   }, 
+  linkEvent: {
+    color: 'blue', 
+  },
 });
 
 export default EventItem;

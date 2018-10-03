@@ -41,9 +41,6 @@ export default class App extends React.Component {
         return resBuffer.json();
       })
       .then((res)=>{
-        // console.log("all results", res)
-        // console.log("the pagination: ", pagination)
-        // console.log("hasMoreresults: ", res.pagination.has_more_items)
         this.setState({
           events: res.events,
           loading: false,
@@ -57,13 +54,11 @@ export default class App extends React.Component {
   }
 
   fetchMoreItems (){
-    // let nextPage = this.state.currentPage++;
     if(this.state.hasMoreItems) {
       this.setState({
         currentPage: this.state.currentPage++,
         loading:true,
       })
-      console.log("the state", this.state)
       return fetch(`https://www.eventbriteapi.com/v3/events/search/?token=VBUSKKCQ2VTXKPOP34PX&page=${this.state.currentPage}`)
       .then(handleErrors)
       .then((resBuffer)=>{
@@ -71,22 +66,16 @@ export default class App extends React.Component {
       })
       .then((res)=>{
         let currentEvents = this.state.events;
-        console.log("the second lot of events: ", res.events)
         this.setState({
           events: currentEvents.concat(res.events),
           loading: false,
           hasMoreItems: res.pagination.has_more_items,
           currentPage: res.pagination.page_number,
         });
-        console.log("current events = :", currentEvents);
       })
       .catch((error)=>{
         console.log(error);
       })
-      console.log("EVEN MORE EVENTS")
-    }
-    else {
-      console.log("either no more items available")
     }
   }
 

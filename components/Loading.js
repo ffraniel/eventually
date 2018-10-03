@@ -15,7 +15,7 @@ class Loading extends Component {
 const styles = StyleSheet.create({
   loadingView: {
     zIndex: 2,
-    backgroundColor: "rgba(120, 120, 120, 0.9)",
+    backgroundColor: "rgba(125, 10, 125, 0.8)",
     position: "absolute",
     left: 0,
     right: 0,
