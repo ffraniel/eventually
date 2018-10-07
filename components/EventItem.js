@@ -38,7 +38,7 @@ class EventItem extends Component {
 
     return (
       <View style={styles.event}> 
-        <Text style={styles.eventTitle}>{this.props.num}: {eName} </Text>
+        <Text style={styles.eventTitle}>{eName} </Text>
         <Text style={styles.eventDate}>{date.day}/{date.month}/{date.year}</Text>
 
         <View style={ this.state.toggleOpen ? styles.expandedDetails : styles.hiddenDetails } >
@@ -53,9 +53,10 @@ class EventItem extends Component {
 
         <Button
           onPress={this.expandEvent}
-          title={this.state.toggleOpen ? "Hide details ^" : "See event type"}
+          title={this.state.toggleOpen ? "Hide details" : "See event type"}
           color={this.state.toggleOpen? "rgb(153, 0, 51)": "#BADA55" }
           accessibilityLabel="See event style for this listing"
+          style={styles.eventButton}
         /> 
       </View>
     );
@@ -63,20 +64,19 @@ class EventItem extends Component {
 }
 
 const styles = StyleSheet.create({
-  EventItem: {
-    backgroundColor: "blue",
-    color: "white"
-  },
   event: {
     borderColor: "grey",
     borderBottomWidth: 2,
     borderStyle: "solid",
-    width: 330
+    flex:1,
+    alignItems:'center',
+    justifyContent:'center',
   },
   eventTitle: {
     color: "#2d0438",
     fontSize: 24,
-    alignItems: "flex-start"
+    alignItems: "flex-start",
+    justifyContent:'center',
   },
   eventDate: {
     color: "#2d0438",
@@ -92,8 +92,7 @@ const styles = StyleSheet.create({
   linkEvent: {
     color: 'blue',
     textDecorationLine: "none",
-    padding: 20,
-    marginLeft: Dimensions.get('window').width * 0.3,
+    alignItems: 'center',
   },
   webView: {
     flex: 1,
@@ -104,6 +103,9 @@ const styles = StyleSheet.create({
     width: 0,
 
   },
+  eventButton: {
+    margin: 10,
+  }
 });
 
 export default EventItem;
