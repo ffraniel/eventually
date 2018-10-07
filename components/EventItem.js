@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { StyleSheet, View, Text, Image, Button, Linking, TouchableOpacity, Dimensions } from "react-native";
 import EventWebView from './EventWebView';
 
+const year = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
 class EventItem extends Component {
   constructor(props) {
     super(props);
@@ -23,14 +25,21 @@ class EventItem extends Component {
     let eName = event.name.text;
     let eDescription = event.description.html;
     let eLink = event.url;
-    let eStart = event.start.utc; // review this when data is being passed through
+    let eStart = event.start.utc; 
     let eEnd = event.end.utc;
     let eThumbnail = event.logo ? event.logo.url : '';
+
+    const date = {
+      day: Number(eStart.split("").slice(8, 10).join("")),
+      month: Number(eStart.split("").slice(5, 7).join("")),
+      year: Number(eStart.split("").slice(0, 4).join("")),
+      monthName: year[Number(eStart.split("").slice(5, 7).join("")) - 1],
+    };
 
     return (
       <View style={styles.event}> 
         <Text style={styles.eventTitle}>{this.props.num}: {eName} </Text>
-        <Text style={styles.eventDate}>{eStart}</Text>
+        <Text style={styles.eventDate}>{date.day}/{date.month}/{date.year}</Text>
 
         <View style={ this.state.toggleOpen ? styles.expandedDetails : styles.hiddenDetails } >
           {eThumbnail.length > 0 && <Image source={{ uri: eThumbnail }}
