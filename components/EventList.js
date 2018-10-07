@@ -19,7 +19,7 @@ class EventList extends Component {
             accessibilityLabel="Show more events"
           />
         }
-        {!this.props.hasMoreItems && <Text>No more items to show</Text>}
+        {!this.props.hasMoreItems && !this.props.loading && <Text style={styles.noItems} >No more items to show</Text>}
       </View>
     )
   }
@@ -28,6 +28,9 @@ class EventList extends Component {
 const styles = StyleSheet.create({
   EventListView: {
   },
+  noItems:{
+    color: '#2d0438',
+  }
 })
 
 export default EventList;

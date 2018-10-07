@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, Image, Button, Linking, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, Image, Button, Linking, TouchableOpacity, Dimensions } from "react-native";
+import EventWebView from './EventWebView';
 
 class EventItem extends Component {
   constructor(props) {
@@ -25,7 +26,6 @@ class EventItem extends Component {
     let eStart = event.start.utc; // review this when data is being passed through
     let eEnd = event.end.utc;
     let eThumbnail = event.logo ? event.logo.url : '';
-    // {console.log(eThumbnail)}
 
     return (
       <View style={styles.event}> 
@@ -35,11 +35,11 @@ class EventItem extends Component {
         <View style={ this.state.toggleOpen ? styles.expandedDetails : styles.hiddenDetails } >
           {eThumbnail.length > 0 && <Image source={{ uri: eThumbnail }}
             style={this.state.toggleOpen ? { width: 200, height: 200 } : { width: 0, height: 0 } }
-          />}   
-          <Text style={this.state.toggleOpen ? styles.expandedEvent : styles.hiddenEvent } innerHTML={eDescription}>Text</Text>      
+          />}         
           <TouchableOpacity onPress={() => Linking.openURL(eLink)} accessibilityLabel="Navigate to the full event page in your web browser." >
-            <Text style={styles.linkEvent}>Full Listing</Text>
+            <Text style={styles.linkEvent}>See Full Listing</Text>
           </TouchableOpacity>
+          <EventWebView descriptionHTML={eDescription} toggleOpen={this.state.toggleOpen} />
         </View>
 
         <Button
@@ -65,29 +65,14 @@ const styles = StyleSheet.create({
     width: 330
   },
   eventTitle: {
-    color: "white",
+    color: "#2d0438",
     fontSize: 24,
     alignItems: "flex-start"
   },
   eventDate: {
-    color: "white",
+    color: "#2d0438",
     fontSize: 16,
     alignItems: "flex-start"
-  },
-  hiddenEvent: {
-    height: 0,
-    fontSize: 16,
-    color: "grey",
-    alignItems: "center",
-    borderColor: "white",
-    borderWidth: 2,
-    borderStyle: "solid"
-  },
-  expandedEvent: {
-    fontSize: 16,
-    color: "rgb(247, 242, 242)",
-    alignItems: "center",
-    height: 30
   },
   expandedDetails: {
     flex: 1,
@@ -96,7 +81,19 @@ const styles = StyleSheet.create({
     height: 0,
   }, 
   linkEvent: {
-    color: 'blue', 
+    color: 'blue',
+    textDecorationLine: "none",
+    padding: 20,
+    marginLeft: Dimensions.get('window').width * 0.3,
+  },
+  webView: {
+    flex: 1,
+    height: 300,
+  },
+  webViewClosed: {
+    height: 0,
+    width: 0,
+
   },
 });
 

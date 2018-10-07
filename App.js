@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 import Loading from './components/Loading';
 import EventList from './components/EventList';
 import handleErrors from './utilities/handleError';
@@ -30,6 +31,10 @@ export default class App extends React.Component {
         events: [],
       })
     }
+  }
+
+  someFunction(){
+    console.log("some function was called")
   }
 
   getEvents(){
@@ -85,7 +90,11 @@ export default class App extends React.Component {
         {this.state.loading && <Loading />}
           <ScrollView>
             <Text style={styles.heading}>Eventually</Text>
-            <EventList events={this.state.events} hasMoreItems={this.state.hasMoreItems} fetchMoreItems={this.fetchMoreItems}/>
+
+            <FormLabel>Search</FormLabel>
+            <FormInput onChangeText={this.someFunction}/>
+
+            <EventList events={this.state.events} hasMoreItems={this.state.hasMoreItems} fetchMoreItems={this.fetchMoreItems} loading={this.state.loading}/>
           </ScrollView>
       </View>
     );
@@ -95,14 +104,18 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "purple",
+    backgroundColor: "#f6defc",
     alignItems: "center",
     justifyContent: "center",
     paddingTop: 20,
   },
   heading: {
-    color: 'white',
-    paddingTop:10,
+    color: '#2d0438',
+    backgroundColor: '#b1ffa3',
+    padding: 20,
+    borderStyle: 'solid',
+    borderColor: 'black',
+    borderBottomWidth: 2,
     fontSize: 14,
   },
 });
