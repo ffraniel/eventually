@@ -144,6 +144,7 @@ export default class App extends React.Component {
         {this.state.loading && <Loading />}
           <ScrollView>
             <Text style={styles.heading} onPress={this.getEvents} >Eventually</Text>
+            <Text style={styles.subHeading}>events listing search</Text>
 
             <FormLabel>Search</FormLabel>
             <FormInput onChange={this.changeHandler}/>
@@ -180,6 +181,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     fontSize: 16,
     fontFamily: 'monospace',
+  },
+  subHeading: {
+    fontSize: 8,
+    fontFamily: 'monospace',
+    padding: 8,
   },
   searchButton: {
     padding: 20,
