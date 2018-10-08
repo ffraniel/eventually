@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View, ScrollView } from "react-native";
-import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
+import { FormLabel, FormInput, FormValidationMessage, Button } from 'react-native-elements'
 import Loading from './components/Loading';
 import EventList from './components/EventList';
 import handleErrors from './utilities/handleError';
@@ -11,14 +11,18 @@ export default class App extends React.Component {
     this.state = {
       loading: true,
       events: [],
-      filteredEvents: [],
-      filters: [],
       hasMoreItems: null,
       currentPage: 1,
+      inputValue: '',
+      searchedForValue: '',
+      activeSearch: false,
     };
     this.resetEventsList = this.resetEventsList.bind(this);
     this.getEvents = this.getEvents.bind(this);
     this.fetchMoreItems = this.fetchMoreItems.bind(this);
+    this.changeHandler = this.changeHandler.bind(this);
+    this.searchEvents = this.searchEvents.bind(this);
+    this.fetchMoreSearchedItems = this.fetchMoreSearchedItems.bind(this);
   }
 
   componentDidMount(){
@@ -33,13 +37,8 @@ export default class App extends React.Component {
     }
   }
 
-  someFunction(){
-    console.log("some function was called")
-  }
-
   getEvents(){
     this.resetEventsList();
-    // console.log("get all events called with the filters: ", this.state.filters);
     return fetch('https://www.eventbriteapi.com/v3/events/search/?token=VBUSKKCQ2VTXKPOP34PX')
       .then(handleErrors)
       .then((resBuffer)=>{
@@ -84,17 +83,80 @@ export default class App extends React.Component {
     }
   }
 
+  changeHandler (event) {
+      this.setState({
+        inputValue: event.nativeEvent.text
+      })
+  }
+
+  searchEvents(){
+    this.setState({
+      loading: true,
+      currentPage: 1,
+      searchedForValue: this.state.inputValue,
+      activeSearch: true,
+    })
+    return fetch(`https://www.eventbriteapi.com/v3/events/search/?token=VBUSKKCQ2VTXKPOP34PX&q=${this.state.inputValue}&page=${this.state.currentPage}`)
+    .then(handleErrors)
+    .then((resBuffer)=>{
+      return resBuffer.json();
+    })
+    .then((res)=>{
+      this.setState({
+        events: res.events,
+        loading: false,
+        hasMoreItems: res.pagination.has_more_items,
+        currentPage: res.pagination.page_number,
+      });
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
+  }
+
+  fetchMoreSearchedItems() {
+    this.setState({
+      loading: true,
+      currentPage: this.state.currentPage++,
+    })
+    return fetch(`https://www.eventbriteapi.com/v3/events/search/?token=VBUSKKCQ2VTXKPOP34PX&q=${this.state.inputValue}&page=${this.state.currentPage}`)
+    .then(handleErrors)
+    .then((resBuffer)=>{
+      return resBuffer.json();
+    })
+    .then((res)=>{
+      let currentEvents = this.state.events;
+      this.setState({
+        events: currentEvents.concat(res.events),
+        loading: false,
+        hasMoreItems: res.pagination.has_more_items,
+        currentPage: res.pagination.page_number,
+      });
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
+  }
+
   render() {
     return (
       <View style={styles.container}>
         {this.state.loading && <Loading />}
           <ScrollView>
-            <Text style={styles.heading}>Eventually</Text>
+            <Text style={styles.heading} onPress={this.getEvents} >Eventually</Text>
 
             <FormLabel>Search</FormLabel>
-            <FormInput onChangeText={this.someFunction}/>
-
-            <EventList events={this.state.events} hasMoreItems={this.state.hasMoreItems} fetchMoreItems={this.fetchMoreItems} loading={this.state.loading}/>
+            <FormInput onChange={this.changeHandler}/>
+            <Button onPress={this.searchValue} 
+              style={styles.searchButton}
+              onPress={this.searchEvents}
+              title="search"
+              color={this.state.loading ? "red" : "#BADA55" }
+              accessibilityLabel="Search for events"
+              value={this.state.inputValue}
+            />
+            {this.state.events.length > 1 && <Text>You searched for: {this.state.searchedForValue}</Text>}
+            <EventList events={this.state.events} hasMoreItems={this.state.hasMoreItems} fetchMoreItems={this.fetchMoreItems} loading={this.state.loading} fetchMoreSearchedItems={this.fetchMoreSearchedItems} activeSearch={this.state.activeSearch} />
           </ScrollView>
       </View>
     );
@@ -116,6 +178,11 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderColor: 'black',
     borderBottomWidth: 2,
-    fontSize: 14,
+    fontSize: 16,
+    fontFamily: 'monospace',
   },
+  searchButton: {
+    padding: 20,
+    color: 'white',
+  }
 });

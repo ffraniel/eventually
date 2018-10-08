@@ -11,12 +11,20 @@ class EventList extends Component {
             <EventItem key={event.id} event={event} num={num}/>
           )
         })}
-        {this.props.hasMoreItems &&
+        {this.props.hasMoreItems && this.props.events.length > 1 && !this.props.activeSearch &&
           <Button 
             onPress={this.props.fetchMoreItems}
             title={"Show more"}
             color={"rgb(153, 0, 51)"}
             accessibilityLabel="Show more events"
+          />
+        }
+        {this.props.hasMoreItems && this.props.events.length > 1 && this.props.activeSearch &&
+          <Button 
+            title={"Show more from search"}
+            onPress={this.props.fetchMoreSearchedItems}
+            color={"red"}
+            accessibilityLabel={"Search for more events"}
           />
         }
         {!this.props.hasMoreItems && !this.props.loading && <Text style={styles.noItems} >No more items to show</Text>}

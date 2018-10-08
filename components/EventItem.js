@@ -78,6 +78,10 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent:'center',
   },
+  thumbnail: {
+    width: 50,
+    height: 50,
+  },
   eventDate: {
     color: "#2d0438",
     fontSize: 16,
@@ -92,7 +96,7 @@ const styles = StyleSheet.create({
   linkEvent: {
     color: 'blue',
     textDecorationLine: "none",
-    alignItems: 'center',
+    justifyContent: 'center',
   },
   webView: {
     flex: 1,
