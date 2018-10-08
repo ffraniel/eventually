@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { WebView, StyleSheet, Dimensions } from 'react-native';
+import PropTypes from 'prop-types';
 
 class EventWebView extends Component {
 
@@ -25,9 +26,12 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height,
     width: '100%',
     backgroundColor: '#f6defc',
-    
   },
   webViewClosed:{
-
+    height: 0,
   },
 });
+
+EventWebView.propTypes = {
+  dogs: PropTypes.number,
+};

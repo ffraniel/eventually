@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Button, Text } from 'react-native';
 import EventItem from './EventItem';
+import PropTypes from 'prop-types';
 
 class EventList extends Component {
   render() {
     return (
       <View style={styles.EventListView}>
-
-        {this.props.events && this.props.events.map((event, num)=>{
+        {this.props.events && this.props.events.map((event)=>{
           return (
-            <EventItem key={event.id} event={event} num={num}/>
+            <EventItem key={event.id} event={event} />
           )
         })}
         {this.props.hasMoreItems && this.props.events.length > 1 && !this.props.activeSearch &&
@@ -41,5 +41,15 @@ const styles = StyleSheet.create({
     color: '#2d0438',
   }
 })
+
+EventList.propTypes = {
+  events: PropTypes.array,
+  hasMoreItems: PropTypes.bool,
+  fetchMoreItems: PropTypes.func,
+  loading: PropTypes.bool,
+  fetchMoreSearchedItems: PropTypes.func,
+  activeSearch: PropTypes.bool,
+  searchedForValue: PropTypes.string,
+}
 
 export default EventList;

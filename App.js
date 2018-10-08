@@ -158,8 +158,6 @@ export default class App extends React.Component {
             {this.state.searchedForValue && 
               <Text style={styles.postSearchMessage}>You searched for: <Text style={styles.searchedForValue}> '{this.state.searchedForValue}'</Text>
               </Text>}
-            
-
             <EventList events={this.state.events} hasMoreItems={this.state.hasMoreItems} fetchMoreItems={this.fetchMoreItems} loading={this.state.loading} fetchMoreSearchedItems={this.fetchMoreSearchedItems} activeSearch={this.state.activeSearch} searchedForValue={this.state.searchedForValue} />
           </ScrollView>
       </View>
