@@ -75,7 +75,8 @@ const styles = StyleSheet.create({
   eventTitle: {
     color: "#2d0438",
     fontSize: 24,
-    alignItems: "flex-start",
+    textAlign: 'center',
+    alignItems: 'center',
     justifyContent:'center',
   },
   thumbnail: {

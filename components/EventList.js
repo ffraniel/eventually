@@ -6,6 +6,7 @@ class EventList extends Component {
   render() {
     return (
       <View style={styles.EventListView}>
+
         {this.props.events && this.props.events.map((event, num)=>{
           return (
             <EventItem key={event.id} event={event} num={num}/>

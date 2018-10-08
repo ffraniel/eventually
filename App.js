@@ -14,7 +14,7 @@ export default class App extends React.Component {
       hasMoreItems: null,
       currentPage: 1,
       inputValue: '',
-      searchedForValue: '',
+      searchedForValue: null,
       activeSearch: false,
     };
     this.resetEventsList = this.resetEventsList.bind(this);
@@ -33,6 +33,7 @@ export default class App extends React.Component {
     if(this.state.events.length > 1) {
       this.setState({
         events: [],
+        searchedForValue: null,
       })
     }
   }
@@ -145,19 +146,21 @@ export default class App extends React.Component {
           <ScrollView>
             <Text style={styles.heading} onPress={this.getEvents} >Eventually</Text>
             <Text style={styles.subHeading}>events listing search</Text>
-
             <FormLabel>Search</FormLabel>
-            <FormInput onChange={this.changeHandler}/>
+            <FormInput style={styles.formInput} onChange={this.changeHandler}/>
             <Button onPress={this.searchValue} 
               style={styles.searchButton}
               onPress={this.searchEvents}
-              title="search"
+              title="SEARCH"
               color={this.state.loading ? "red" : "#BADA55" }
               accessibilityLabel="Search for events"
-              value={this.state.inputValue}
-            />
-            {this.state.events.length > 1 && <Text>You searched for: {this.state.searchedForValue}</Text>}
-            <EventList events={this.state.events} hasMoreItems={this.state.hasMoreItems} fetchMoreItems={this.fetchMoreItems} loading={this.state.loading} fetchMoreSearchedItems={this.fetchMoreSearchedItems} activeSearch={this.state.activeSearch} />
+              value={this.state.inputValue}/>
+            {this.state.searchedForValue && 
+              <Text style={styles.postSearchMessage}>You searched for: <Text style={styles.searchedForValue}> '{this.state.searchedForValue}'</Text>
+              </Text>}
+            
+
+            <EventList events={this.state.events} hasMoreItems={this.state.hasMoreItems} fetchMoreItems={this.fetchMoreItems} loading={this.state.loading} fetchMoreSearchedItems={this.fetchMoreSearchedItems} activeSearch={this.state.activeSearch} searchedForValue={this.state.searchedForValue} />
           </ScrollView>
       </View>
     );
@@ -186,9 +189,13 @@ const styles = StyleSheet.create({
     fontSize: 8,
     fontFamily: 'monospace',
     padding: 8,
+    marginLeft: 10,
   },
-  searchButton: {
-    padding: 20,
-    color: 'white',
+  postSearchMessage: {
+    marginLeft: 8,
+    paddingLeft:8,
+  },
+  searchedForValue: {
+    color:'#d82aff',
   }
 });
