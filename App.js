@@ -49,8 +49,7 @@ export default class App extends React.Component {
           hasMoreItems: res.pagination.has_more_items,
           currentPage: res.pagination.page_number,
         });
-      })
-      .catch(error => console.log(error));
+      });
   }
 
   resetEventsList() {
@@ -85,8 +84,7 @@ export default class App extends React.Component {
             hasMoreItems: res.pagination.has_more_items,
             currentPage: res.pagination.page_number,
           }));
-        })
-        .catch(error => console.log(error));
+        });
     }
   }
 
@@ -118,8 +116,7 @@ export default class App extends React.Component {
           hasMoreItems: res.pagination.has_more_items,
           currentPage: res.pagination.page_number,
         });
-      })
-      .catch(error => console.log(error));
+      });
   }
 
   fetchMoreSearchedItems() {
@@ -141,8 +138,7 @@ export default class App extends React.Component {
           hasMoreItems: res.pagination.has_more_items,
           currentPage: res.pagination.page_number,
         }));
-      })
-      .catch(error => console.log(error));
+      });
   }
 
   render() {

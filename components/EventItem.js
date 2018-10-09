@@ -34,9 +34,8 @@ class EventItem extends Component {
       month: Number(eStart.split('').slice(5, 7).join('')),
       year: Number(eStart.split('').slice(0, 4).join('')),
     };
-
     const { toggleOpen } = this.state;
-
+    const eventItemRef = React.createRef();
     return (
       <View style={styles.event}>
         <Text style={styles.eventTitle}>{eName}</Text>
@@ -48,10 +47,13 @@ class EventItem extends Component {
           {date.year}
         </Text>
         <View style={toggleOpen ? styles.expandedDetails : styles.hiddenDetails}>
-          { eThumbnail.length > 0 && (<Image 
-            source={{ uri: eThumbnail }} 
-            style={toggleOpen ? { width: 200, height: 200 } : { width: 0, height: 0 }}
-          />)
+          { eThumbnail.length > 0
+            && (
+              <Image
+                source={{ uri: eThumbnail }}
+                style={toggleOpen ? { width: 200, height: 200 } : { width: 0, height: 0 }}
+              />
+            )
           }
           <TouchableOpacity onPress={() => Linking.openURL(eLink)} accessibilityLabel="Navigate to the full event page in your web browser.">
             <Text style={styles.linkEvent}>See Full Listing</Text>
@@ -65,6 +67,7 @@ class EventItem extends Component {
           color={toggleOpen ? 'rgb(153, 0, 51)' : '#BADA55'}
           accessibilityLabel="See event style for this listing"
           style={styles.eventButton}
+          ref={eventItemRef}
         />
       </View>
     );

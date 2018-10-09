@@ -5,15 +5,16 @@ import PropTypes from 'prop-types';
 class EventWebView extends Component {
   render() {
     const { toggleOpen, descriptionHTML } = this.props;
+    const webviewRef = React.createRef();
     return (
       <WebView
         style={toggleOpen ? styles.webView : styles.webViewClosed}
-        automaticallyAdjustContentInsets={true}
+        automaticallyAdjustContentInsets
         source={{ html: descriptionHTML }}
-        javaScriptEnabled={true}
-        startInLoadingState={true}
-        domStorageEnabled={true}
-        ref="Event webview"
+        javaScriptEnabled
+        startInLoadingState
+        domStorageEnabled
+        ref={webviewRef}
       />
     );
   }

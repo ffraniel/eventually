@@ -9,6 +9,8 @@ const EventList = (props) => {
   const {
     activeSearch, fetchMoreItems, hasMoreItems, events, fetchMoreSearchedItems, loading,
   } = props;
+  const noSearchEventItemRef = React.createRef();
+  const activeSearchEventItemRef = React.createRef();
   return (
     <View style={styles.EventListView}>
       {events && events.map(event => <EventItem key={event.id} event={event} />)}
@@ -21,6 +23,7 @@ const EventList = (props) => {
         title="Show more"
         color="rgb(153, 0, 51)"
         accessibilityLabel="Show more events"
+        ref={noSearchEventItemRef}
       />
       )
       }
@@ -33,6 +36,7 @@ const EventList = (props) => {
         onPress={fetchMoreSearchedItems}
         color="red"
         accessibilityLabel="Search for more events"
+        ref={activeSearchEventItemRef}
       />
       )
       }
