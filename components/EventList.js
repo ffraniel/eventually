@@ -1,46 +1,55 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, Button, Text } from 'react-native';
-import EventItem from './EventItem';
+import React from 'react';
+import {
+  StyleSheet, View, Button, Text,
+} from 'react-native';
 import PropTypes from 'prop-types';
+import EventItem from './EventItem';
 
-class EventList extends Component {
-  render() {
-    return (
-      <View style={styles.EventListView}>
-        {this.props.events && this.props.events.map((event)=>{
-          return (
-            <EventItem key={event.id} event={event} />
-          )
-        })}
-        {this.props.hasMoreItems && this.props.events.length > 1 && !this.props.activeSearch &&
-          <Button 
-            onPress={this.props.fetchMoreItems}
-            title={"Show more"}
-            color={"rgb(153, 0, 51)"}
-            accessibilityLabel="Show more events"
-          />
-        }
-        {this.props.hasMoreItems && this.props.events.length > 1 && this.props.activeSearch &&
-          <Button 
-            title={"Show more from search"}
-            onPress={this.props.fetchMoreSearchedItems}
-            color={"red"}
-            accessibilityLabel={"Search for more events"}
-          />
-        }
-        {!this.props.hasMoreItems && !this.props.loading && <Text style={styles.noItems} >No more items to show</Text>}
-      </View>
-    )
-  }
-}
+const EventList = (props) => {
+  const {
+    activeSearch, fetchMoreItems, hasMoreItems, events, fetchMoreSearchedItems, loading,
+  } = props;
+  return (
+    <View style={styles.EventListView}>
+      {events && events.map(event => <EventItem key={event.id} event={event} />)}
+      {hasMoreItems
+      && events.length > 1
+      && !activeSearch
+      && (
+      <Button
+        onPress={fetchMoreItems}
+        title="Show more"
+        color="rgb(153, 0, 51)"
+        accessibilityLabel="Show more events"
+      />
+      )
+      }
+      {hasMoreItems
+      && events.length > 1
+      && activeSearch
+      && (
+      <Button
+        title="Show more from search"
+        onPress={fetchMoreSearchedItems}
+        color="red"
+        accessibilityLabel="Search for more events"
+      />
+      )
+      }
+      {!hasMoreItems
+      && !loading
+      && <Text style={styles.noItems}>No more items to show</Text>}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   EventListView: {
   },
-  noItems:{
+  noItems: {
     color: '#2d0438',
-  }
-})
+  },
+});
 
 EventList.propTypes = {
   events: PropTypes.array,
@@ -49,7 +58,6 @@ EventList.propTypes = {
   loading: PropTypes.bool,
   fetchMoreSearchedItems: PropTypes.func,
   activeSearch: PropTypes.bool,
-  searchedForValue: PropTypes.string,
-}
+};
 
 export default EventList;

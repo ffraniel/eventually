@@ -3,18 +3,19 @@ import { WebView, StyleSheet, Dimensions } from 'react-native';
 import PropTypes from 'prop-types';
 
 class EventWebView extends Component {
-
-  render(){
+  render() {
+    const { toggleOpen, descriptionHTML } = this.props;
     return (
-      <WebView style={this.props.toggleOpen ? styles.webView : styles.webViewClosed} 
-      automaticallyAdjustContentInsets={true}
-      source={{ html: this.props.descriptionHTML }} 
-      javaScriptEnabled={true}
-      startInLoadingState={true}
-      domStorageEnabled={true}
-      ref={'Event webview'} 
-       />
-    )
+      <WebView
+        style={toggleOpen ? styles.webView : styles.webViewClosed}
+        automaticallyAdjustContentInsets={true}
+        source={{ html: descriptionHTML }}
+        javaScriptEnabled={true}
+        startInLoadingState={true}
+        domStorageEnabled={true}
+        ref="Event webview"
+      />
+    );
   }
 }
 
@@ -27,11 +28,12 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#f6defc',
   },
-  webViewClosed:{
+  webViewClosed: {
     height: 0,
   },
 });
 
 EventWebView.propTypes = {
-  dogs: PropTypes.number,
+  toggleOpen: PropTypes.bool,
+  descriptionHTML: PropTypes.string,
 };
