@@ -55,13 +55,32 @@ const styles = StyleSheet.create({
   },
 });
 
+EventList.defaultProps = {
+  hasMoreItems: false,
+  events: [],
+};
+
 EventList.propTypes = {
-  events: PropTypes.array,
+  events: PropTypes.arrayOf(PropTypes.shape({
+    logo: PropTypes.shape({
+      url: PropTypes.string,
+    }),
+    description: PropTypes.shape({
+      html: PropTypes.string.isRequired,
+    }).isRequired,
+    name: PropTypes.shape({
+      text: PropTypes.string.isRequired,
+    }).isRequired,
+    url: PropTypes.string.isRequired,
+    start: PropTypes.shape({
+      utc: PropTypes.string.isRequired,
+    }).isRequired,
+  })),
   hasMoreItems: PropTypes.bool,
-  fetchMoreItems: PropTypes.func,
-  loading: PropTypes.bool,
-  fetchMoreSearchedItems: PropTypes.func,
-  activeSearch: PropTypes.bool,
+  fetchMoreItems: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
+  fetchMoreSearchedItems: PropTypes.func.isRequired,
+  activeSearch: PropTypes.bool.isRequired,
 };
 
 export default EventList;
