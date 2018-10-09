@@ -7,7 +7,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "eject": "expo eject",
-    "eslint": "./node_modules/.bin/eslint components/EventWebView.js"
+    "eslint": "./node_modules/.bin/eslint *.js"
   },
   "dependencies": {
     "expo": "^30.0.1",

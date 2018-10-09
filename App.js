@@ -164,7 +164,7 @@ export default class App extends React.Component {
             <Text style={styles.postSearchMessage}>
               You searched for:
               <Text style={styles.searchedForValue}>
-                {searchedForValue}
+                {` ${searchedForValue}`}
               </Text>
             </Text>
           )}
