@@ -48,8 +48,6 @@ const EventList = (props) => {
 };
 
 const styles = StyleSheet.create({
-  EventListView: {
-  },
   noItems: {
     color: '#2d0438',
   },

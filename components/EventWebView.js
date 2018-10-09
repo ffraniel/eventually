@@ -9,7 +9,7 @@ class EventWebView extends Component {
     return (
       <WebView
         style={toggleOpen ? styles.webView : styles.webViewClosed}
-        automaticallyAdjustContentInsets
+        automaticallyAdjustContentInsets={false}
         source={{ html: descriptionHTML }}
         javaScriptEnabled
         startInLoadingState
@@ -24,8 +24,8 @@ export default EventWebView;
 
 const styles = StyleSheet.create({
   webView: {
-    zIndex: 2,
-    height: Dimensions.get('window').height,
+    flex: 1,
+    height: Dimensions.get('window').height * 1.5,
     width: '100%',
     backgroundColor: '#f6defc',
   },
