@@ -1,6 +1,11 @@
-import React from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
-import { FormLabel, FormInput, FormValidationMessage, Button } from 'react-native-elements'
+import React from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+} from 'react-native';
+import { FormLabel, FormInput, Button } from 'react-native-elements';
 import Loading from './components/Loading';
 import EventList from './components/EventList';
 import handleErrors from './utilities/handleError';
@@ -17,35 +22,27 @@ export default class App extends React.Component {
       searchedForValue: null,
       activeSearch: false,
     };
-    this.resetEventsList = this.resetEventsList.bind(this);
+
     this.getEvents = this.getEvents.bind(this);
+    this.resetEventsList = this.resetEventsList.bind(this);
     this.fetchMoreItems = this.fetchMoreItems.bind(this);
     this.changeHandler = this.changeHandler.bind(this);
     this.searchEvents = this.searchEvents.bind(this);
     this.fetchMoreSearchedItems = this.fetchMoreSearchedItems.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.getEvents();
   }
 
-  resetEventsList (){
-    if(this.state.events.length > 1) {
-      this.setState({
-        events: [],
-        searchedForValue: null,
-      })
-    }
-  }
-
-  getEvents(){
+  getEvents() {
     this.resetEventsList();
-    return fetch('https://www.eventbriteapi.com/v3/events/search/?token=VBUSKKCQ2VTXKPOP34PX')
+    return fetch(
+      'https://www.eventbriteapi.com/v3/events/search/?token=VBUSKKCQ2VTXKPOP34PX',
+    )
       .then(handleErrors)
-      .then((resBuffer)=>{
-        return resBuffer.json();
-      })
-      .then((res)=>{
+      .then(resBuffer => resBuffer.json())
+      .then((res) => {
         this.setState({
           events: res.events,
           loading: false,
@@ -53,113 +50,141 @@ export default class App extends React.Component {
           currentPage: res.pagination.page_number,
         });
       })
-      .catch((error)=>{
-        console.log(error);
-      })
+      .catch(error => console.log(error));
   }
 
-  fetchMoreItems (){
-    if(this.state.hasMoreItems) {
+  resetEventsList() {
+    const { events } = this.state;
+    if (events.length > 1) {
       this.setState({
-        currentPage: this.state.currentPage++,
-        loading:true,
-      })
-      return fetch(`https://www.eventbriteapi.com/v3/events/search/?token=VBUSKKCQ2VTXKPOP34PX&page=${this.state.currentPage}`)
+        events: [],
+        searchedForValue: null,
+      });
+    }
+  }
+
+  fetchMoreItems() {
+    const { hasMoreItems } = this.state;
+    let { currentPage } = this.state;
+    if (hasMoreItems) {
+      this.setState({
+        currentPage: currentPage += 1,
+        loading: true,
+      });
+      return fetch(
+        `https://www.eventbriteapi.com/v3/events/search/?token=VBUSKKCQ2VTXKPOP34PX&page=${
+          currentPage
+        }`,
+      )
+        .then(handleErrors)
+        .then(resBuffer => resBuffer.json())
+        .then((res) => {
+          this.setState(prevState => ({
+            events: prevState.events.concat(res.events),
+            loading: false,
+            hasMoreItems: res.pagination.has_more_items,
+            currentPage: res.pagination.page_number,
+          }));
+        })
+        .catch(error => console.log(error));
+    }
+  }
+
+  changeHandler(event) {
+    this.setState({
+      inputValue: event.nativeEvent.text,
+    });
+  }
+
+  searchEvents() {
+    const { inputValue, currentPage } = this.state;
+    this.setState({
+      loading: true,
+      currentPage: 1,
+      searchedForValue: inputValue,
+      activeSearch: true,
+    });
+    return fetch(
+      `https://www.eventbriteapi.com/v3/events/search/?token=VBUSKKCQ2VTXKPOP34PX&q=${
+        inputValue
+      }&page=${currentPage}`,
+    )
       .then(handleErrors)
-      .then((resBuffer)=>{
-        return resBuffer.json();
-      })
-      .then((res)=>{
-        let currentEvents = this.state.events;
+      .then(resBuffer => resBuffer.json())
+      .then((res) => {
         this.setState({
-          events: currentEvents.concat(res.events),
+          events: res.events,
           loading: false,
           hasMoreItems: res.pagination.has_more_items,
           currentPage: res.pagination.page_number,
         });
       })
-      .catch((error)=>{
-        console.log(error);
-      })
-    }
-  }
-
-  changeHandler (event) {
-      this.setState({
-        inputValue: event.nativeEvent.text
-      })
-  }
-
-  searchEvents(){
-    this.setState({
-      loading: true,
-      currentPage: 1,
-      searchedForValue: this.state.inputValue,
-      activeSearch: true,
-    })
-    return fetch(`https://www.eventbriteapi.com/v3/events/search/?token=VBUSKKCQ2VTXKPOP34PX&q=${this.state.inputValue}&page=${this.state.currentPage}`)
-    .then(handleErrors)
-    .then((resBuffer)=>{
-      return resBuffer.json();
-    })
-    .then((res)=>{
-      this.setState({
-        events: res.events,
-        loading: false,
-        hasMoreItems: res.pagination.has_more_items,
-        currentPage: res.pagination.page_number,
-      });
-    })
-    .catch((error)=>{
-      console.log(error);
-    })
+      .catch(error => console.log(error));
   }
 
   fetchMoreSearchedItems() {
+    let { currentPage } = this.state;
+    const { inputValue } = this.state;
     this.setState({
       loading: true,
-      currentPage: this.state.currentPage++,
-    })
-    return fetch(`https://www.eventbriteapi.com/v3/events/search/?token=VBUSKKCQ2VTXKPOP34PX&q=${this.state.inputValue}&page=${this.state.currentPage}`)
-    .then(handleErrors)
-    .then((resBuffer)=>{
-      return resBuffer.json();
-    })
-    .then((res)=>{
-      let currentEvents = this.state.events;
-      this.setState({
-        events: currentEvents.concat(res.events),
-        loading: false,
-        hasMoreItems: res.pagination.has_more_items,
-        currentPage: res.pagination.page_number,
-      });
-    })
-    .catch((error)=>{
-      console.log(error);
-    })
+      currentPage: currentPage += 1,
+    });
+    return fetch(
+      `https://www.eventbriteapi.com/v3/events/search/?token=VBUSKKCQ2VTXKPOP34PX&q=${inputValue}&page=${currentPage}`,
+    )
+      .then(handleErrors)
+      .then(resBuffer => resBuffer.json())
+      .then((res) => {
+        this.setState(prevState => ({
+          events: prevState.events.concat(res.events),
+          loading: false,
+          hasMoreItems: res.pagination.has_more_items,
+          currentPage: res.pagination.page_number,
+        }));
+      })
+      .catch(error => console.log(error));
   }
 
   render() {
+    const {
+      loading, inputValue, searchedForValue, events, hasMoreItems, activeSearch,
+    } = this.state;
     return (
       <View style={styles.container}>
-        {this.state.loading && <Loading />}
-          <ScrollView>
-            <Text style={styles.heading} onPress={this.getEvents} >Eventually</Text>
-            <Text style={styles.subHeading}>events listing search</Text>
-            <FormLabel>Search</FormLabel>
-            <FormInput style={styles.formInput} onChange={this.changeHandler}/>
-            <Button onPress={this.searchValue} 
-              style={styles.searchButton}
-              onPress={this.searchEvents}
-              title="SEARCH"
-              color={this.state.loading ? "red" : "#BADA55" }
-              accessibilityLabel="Search for events"
-              value={this.state.inputValue}/>
-            {this.state.searchedForValue && 
-              <Text style={styles.postSearchMessage}>You searched for: <Text style={styles.searchedForValue}> '{this.state.searchedForValue}'</Text>
-              </Text>}
-            <EventList events={this.state.events} hasMoreItems={this.state.hasMoreItems} fetchMoreItems={this.fetchMoreItems} loading={this.state.loading} fetchMoreSearchedItems={this.fetchMoreSearchedItems} activeSearch={this.state.activeSearch} searchedForValue={this.state.searchedForValue} />
-          </ScrollView>
+        {loading && <Loading />}
+        <ScrollView>
+          <Text style={styles.heading} onPress={this.getEvents}>
+            Eventually
+          </Text>
+          <Text style={styles.subHeading}>events listing search</Text>
+          <FormLabel>Search</FormLabel>
+          <FormInput style={styles.formInput} onChange={this.changeHandler} />
+          <Button
+            style={styles.searchButton}
+            onPress={this.searchEvents}
+            title="SEARCH"
+            color={loading ? 'red' : '#BADA55'}
+            accessibilityLabel="Search for events"
+            value={inputValue}
+          />
+          {searchedForValue && (
+            <Text style={styles.postSearchMessage}>
+              You searched for:
+              <Text style={styles.searchedForValue}>
+                {searchedForValue}
+              </Text>
+            </Text>
+          )}
+          <EventList
+            events={events}
+            hasMoreItems={hasMoreItems}
+            fetchMoreItems={this.fetchMoreItems}
+            loading={loading}
+            fetchMoreSearchedItems={this.fetchMoreSearchedItems}
+            activeSearch={activeSearch}
+            searchedForValue={searchedForValue}
+          />
+        </ScrollView>
       </View>
     );
   }
@@ -168,9 +193,9 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f6defc",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#f6defc',
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingTop: 20,
   },
   heading: {
@@ -191,9 +216,9 @@ const styles = StyleSheet.create({
   },
   postSearchMessage: {
     marginLeft: 8,
-    paddingLeft:8,
+    paddingLeft: 8,
   },
   searchedForValue: {
-    color:'#d82aff',
-  }
+    color: '#d82aff',
+  },
 });
