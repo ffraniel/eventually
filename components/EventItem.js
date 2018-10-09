@@ -129,7 +129,7 @@ EventItem.propTypes = {
       url: PropTypes.string,
     }),
     description: PropTypes.shape({
-      html: PropTypes.string.isRequired,
+      html: PropTypes.string,
     }).isRequired,
     name: PropTypes.shape({
       text: PropTypes.string.isRequired,

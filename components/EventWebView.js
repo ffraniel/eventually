@@ -34,7 +34,11 @@ const styles = StyleSheet.create({
   },
 });
 
+EventWebView.defaultProps = {
+  descriptionHTML: '',
+};
+
 EventWebView.propTypes = {
   toggleOpen: PropTypes.bool.isRequired,
-  descriptionHTML: PropTypes.string.isRequired,
+  descriptionHTML: PropTypes.string,
 };

@@ -64,6 +64,7 @@ export default class App extends React.Component {
 
   fetchMoreItems() {
     const { hasMoreItems } = this.state;
+    console.log(hasMoreItems)
     let { currentPage } = this.state;
     if (hasMoreItems) {
       this.setState({
