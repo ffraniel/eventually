@@ -124,7 +124,21 @@ const styles = StyleSheet.create({
 });
 
 EventItem.propTypes = {
-  event: PropTypes.object,
+  event: PropTypes.shape({
+    logo: PropTypes.shape({
+      url: PropTypes.string,
+    }),
+    description: PropTypes.shape({
+      html: PropTypes.string.isRequired,
+    }).isRequired,
+    name: PropTypes.shape({
+      text: PropTypes.string.isRequired,
+    }).isRequired,
+    url: PropTypes.string.isRequired,
+    start: PropTypes.shape({
+      utc: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
 };
 
 export default EventItem;
