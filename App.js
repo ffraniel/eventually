@@ -63,30 +63,26 @@ export default class App extends React.Component {
   }
 
   fetchMoreItems() {
-    const { hasMoreItems } = this.state;
-    console.log(hasMoreItems)
     let { currentPage } = this.state;
-    if (hasMoreItems) {
-      this.setState({
-        currentPage: currentPage += 1,
-        loading: true,
+    this.setState({
+      currentPage: currentPage += 1,
+      loading: true,
+    });
+    return fetch(
+      `https://www.eventbriteapi.com/v3/events/search/?token=VBUSKKCQ2VTXKPOP34PX&page=${
+        currentPage
+      }`,
+    )
+      .then(handleErrors)
+      .then(resBuffer => resBuffer.json())
+      .then((res) => {
+        this.setState(prevState => ({
+          events: prevState.events.concat(res.events),
+          loading: false,
+          hasMoreItems: res.pagination.has_more_items,
+          currentPage: res.pagination.page_number,
+        }));
       });
-      return fetch(
-        `https://www.eventbriteapi.com/v3/events/search/?token=VBUSKKCQ2VTXKPOP34PX&page=${
-          currentPage
-        }`,
-      )
-        .then(handleErrors)
-        .then(resBuffer => resBuffer.json())
-        .then((res) => {
-          this.setState(prevState => ({
-            events: prevState.events.concat(res.events),
-            loading: false,
-            hasMoreItems: res.pagination.has_more_items,
-            currentPage: res.pagination.page_number,
-          }));
-        });
-    }
   }
 
   changeHandler(event) {
